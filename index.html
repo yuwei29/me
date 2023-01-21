@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>notes</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico">
+    <style>
+        a{
+        text-decoration: none;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/browser-cjs@1.0.3/require.min.js"></script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css">
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script> -->
+</head>
+
+<body>
+    <style>
+        #content img {
+      max-width:800px;
+	    width: 100%;
+	    height: auto
+        }
+    </style>
+    <div id="content" style="max-width:800px;margin-left:auto;margin-right:auto;
+    margin-bottom:80px;font-size:18px;"></div>
+    
+    <script>
+        let textfile = "./article/indexPage"
+        let queryString = window.location.search;
+        if(queryString!=''){
+            let urlParams = new URLSearchParams(queryString);
+            textfile = urlParams.get('article')
+	    textfile = './article/'+textfile
+        }
+        var codeRender = require('./lib/showCode.js');
+        var textRender = require('./lib/showArticle.js')({
+            highlight: function (str, lang) {
+                if (lang && codeRender.getLanguage(lang)) {
+                    try {
+                        return codeRender.highlight(str, { language: lang }).value;
+                    } catch (__) { }
+                }
+
+                return ''; // use external default escaping
+            }
+        });
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", textfile); 
+        xhr.onload = function () // the onload callback is (asynchronously) sent when the file finishes loading
+        {
+            let text = xhr.responseText;
+            document.getElementById("content").innerHTML = textRender.render(text) // sets page content to rendered text
+        }
+        xhr.send(); // actually sends the request
+    </script>
+</body>
+
+</html>
