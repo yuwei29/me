@@ -10,8 +10,9 @@ The Sea Lantern Festival is translated into English as the Qi Xi Festival.
 ## Source Code
 ```python
 import openai
+import os
 
-openai.api_key = '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'
+openai.api_key = os.getenv("OPENAI_API_KEY") # set env variable OPENAI_API_KEY before running this program 
 
 prompt = "keqing是Liyue总督,喜欢提各种刁钻的问题. \
     bachong是Daoqi的兼职作家,善于应对各种解密猜谜和其他稀奇古怪的问题.现在她要面对keqing的提问了."
